@@ -19,7 +19,7 @@ h1{
 font-size:70px;
 margin-top:80px;
 color:#FFD700;
-text-shadow:0 0 25px #FFD700;
+text-shadow:0 0 20px #FFD700;
 }
 
 .subtitle{
@@ -27,24 +27,42 @@ font-size:22px;
 opacity:0.8;
 }
 
-.server-box{
+.server{
 margin-top:40px;
 font-size:25px;
 }
 
 button{
-padding:15px 35px;
-margin:10px;
+padding:15px 30px;
 font-size:18px;
 border:none;
-border-radius:12px;
+border-radius:10px;
 background:linear-gradient(45deg,#ffaa00,#ff7700);
 cursor:pointer;
+margin:10px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+width:85%;
+margin:auto;
+margin-top:60px;
+}
+
+.card{
+background:#111827;
+padding:30px;
+border-radius:15px;
+text-decoration:none;
+color:white;
 transition:0.3s;
 }
 
-button:hover{
-transform:scale(1.1);
+.card:hover{
+transform:scale(1.05);
+background:#1f2937;
 }
 
 .star{
@@ -61,19 +79,6 @@ animation:twinkle 4s infinite;
 100%{opacity:0}
 }
 
-.section{
-margin-top:80px;
-}
-
-.card{
-display:inline-block;
-background:#0f172a;
-padding:30px;
-margin:20px;
-border-radius:15px;
-width:200px;
-}
-
 </style>
 </head>
 
@@ -82,7 +87,7 @@ width:200px;
 <h1>☀️ SOLARIS LATAM</h1>
 <p class="subtitle">Servidor Survival Latino</p>
 
-<div class="server-box">
+<div class="server">
 
 📡 IP: <b>solarislatammc.falixsrv.me</b>
 
@@ -90,76 +95,91 @@ width:200px;
 
 <button onclick="copyIP()">Copiar IP</button>
 
-<h2 id="players">Cargando servidor...</h2>
+<h2 id="status">Cargando servidor...</h2>
+<h3 id="players"></h3>
 
 </div>
 
-<div class="section">
+<h2>Menú del servidor</h2>
 
-<h2>🎮 Conectar</h2>
+<div class="grid">
 
-<button onclick="copyIP()">Java Edition</button>
-<button onclick="copyIP()">Bedrock Edition</button>
+<a href="rangos.html" class="card">
+<h3>🏆 Rangos</h3>
+<p>Información de rangos</p>
+</a>
 
-</div>
+<a href="postulaciones.html" class="card">
+<h3>📋 Postulaciones</h3>
+<p>Aplicar para staff</p>
+</a>
 
-<div class="section">
+<a href="recursos.html" class="card">
+<h3>📦 Recursos</h3>
+<p>Mods y texture packs</p>
+</a>
 
-<h2>📊 Estadísticas</h2>
+<a href="reglas.html" class="card">
+<h3>📜 Reglas</h3>
+<p>Normas del servidor</p>
+</a>
 
-<div class="card">
-<h3>Jugadores</h3>
-<p id="statPlayers">--</p>
-</div>
+<a href="mapa.html" class="card">
+<h3>🗺️ Mapa</h3>
+<p>Mapa del mundo</p>
+</a>
 
-<div class="card">
-<h3>Estado</h3>
-<p id="statStatus">--</p>
-</div>
+<a href="tienda.html" class="card">
+<h3>💰 Tienda</h3>
+<p>Comprar rangos</p>
+</a>
+
+<a href="staff.html" class="card">
+<h3>👑 Staff</h3>
+<p>Equipo del servidor</p>
+</a>
 
 </div>
 
 <script>
 
+const ip = "solarislatammc.falixsrv.me";
+
 function copyIP(){
-navigator.clipboard.writeText("solarislatammc.falixsrv.me");
+navigator.clipboard.writeText(ip);
 alert("IP copiada");
 }
 
 async function checkServer(){
 
-let res = await fetch("https://api.mcsrvstat.us/2/solarislatammc.falixsrv.me");
+try{
+
+let res = await fetch("https://api.mcsrvstat.us/3/"+ip);
 let data = await res.json();
 
 if(data.online){
 
-document.getElementById("players").innerText =
-"🟢 Servidor ONLINE - "+data.players.online+" jugadores";
-
-document.getElementById("statPlayers").innerText =
-data.players.online;
-
-document.getElementById("statStatus").innerText =
-"Online";
+document.getElementById("status").innerText="🟢 Servidor ONLINE";
+document.getElementById("players").innerText=
+data.players.online+" / "+data.players.max+" jugadores";
 
 }else{
 
-document.getElementById("players").innerText =
-"🔴 Servidor OFFLINE";
+document.getElementById("status").innerText="🔴 Servidor OFFLINE";
+document.getElementById("players").innerText="0 jugadores";
 
-document.getElementById("statPlayers").innerText =
-"0";
+}
 
-document.getElementById("statStatus").innerText =
-"Offline";
+}catch{
+
+document.getElementById("status").innerText="⚠️ Error";
 
 }
 
 }
 
 checkServer();
-
-setInterval(checkServer,30000);
+setInterval(checkServer,20000);
 
 for(let i=0;i<120;i++){
 let star=document.createElement("div");

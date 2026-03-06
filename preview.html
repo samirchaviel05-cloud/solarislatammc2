@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Solaris LATAM</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#050505;
+color:white;
+overflow-x:hidden;
+}
+
+/* HERO */
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
+.logo{
+width:200px;
+animation:flotar 4s infinite ease-in-out;
+}
+
+@keyframes flotar{
+0%{transform:translateY(0)}
+50%{transform:translateY(-15px)}
+100%{transform:translateY(0)}
+}
+
+h1{
+font-size:60px;
+margin:10px;
+}
+
+.ip{
+font-size:22px;
+margin:10px;
+}
+
+.btn{
+padding:14px 28px;
+margin:10px;
+border:none;
+border-radius:8px;
+background:#ff9900;
+font-weight:bold;
+cursor:pointer;
+}
+
+.btn:hover{
+transform:scale(1.1);
+}
+
+/* secciones */
+
+.section{
+padding:80px 20px;
+text-align:center;
+}
+
+.cards{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+}
+
+.card{
+background:#141414;
+padding:25px;
+border-radius:12px;
+width:220px;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="hero">
+
+<img src="logo.png" class="logo">
+
+<h1>Solaris LATAM</h1>
+
+<p>Servidor Survival Latinoamericano</p>
+
+<div class="ip">
+solarislatammc.falixsrv.me
+</div>
+
+<button class="btn" onclick="copiar()">Copiar IP</button>
+
+<br>
+
+<button class="btn">Jugar Java</button>
+<button class="btn">Jugar Bedrock</button>
+
+</div>
+
+<div class="section">
+
+<h2>Jugadores Online</h2>
+
+<div id="online">Cargando...</div>
+
+</div>
+
+<div class="section">
+
+<h2>Mapa del Servidor</h2>
+
+<iframe 
+src="http://solarislatammc.falixsrv.me:8123" 
+width="90%" 
+height="500">
+</iframe>
+
+</div>
+
+<div class="section">
+
+<h2>Top Jugadores</h2>
+
+<div class="cards">
+
+<div class="card">#1 Jugador</div>
+<div class="card">#2 Jugador</div>
+<div class="card">#3 Jugador</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* copiar ip */
+
+function copiar(){
+navigator.clipboard.writeText("solarislatammc.falixsrv.me");
+alert("IP copiada!");
+}
+
+/* jugadores online */
+
+fetch("https://api.mcsrvstat.us/2/solarislatammc.falixsrv.me")
+.then(r=>r.json())
+.then(data=>{
+document.getElementById("online").innerHTML =
+data.players.online + " jugadores conectados";
+});
+
+/* estrellas */
+
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars=[];
+
+for(let i=0;i<200;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2
+});
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="white";
+
+stars.forEach(s=>{
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fill();
+});
+
+}
+
+setInterval(draw,33);
+
+</script>
+
+</body>
+</html>
